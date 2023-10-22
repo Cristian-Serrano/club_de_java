@@ -97,10 +97,13 @@ public class TypeCheckTest {
         for (Record record: recordList
              ) {
 
+            //EN EL FUTURO PATTERN MATCHING TAMBIÉN PARA OBJETOS NORMALES NO SÓLO records..
             if (record instanceof Persona(var nombre, var apellidos, var dni)) {
                 System.out.println("Persona: " + nombre + " " + apellidos + " | dni: " + dni);
-            } else if (record instanceof Empleado(var codigo, Persona(var nombre, var apellidos, var dni))) {
-                System.out.println("Empleado: " + codigo + " | " + nombre + " " + apellidos + " | dni: " + dni);
+            } else if (record instanceof Empleado(var codigo, Persona(var nombre, var apellidos, _))) {
+                                                                                        //        |---IGNORO EL dni EL OPERADOR DE IGNORAR _ EN PREVIEW
+                                                                                        //        V   UNNAMED PATTERN - PATRÓN SIN NOMBRE
+                System.out.println("Empleado: " + codigo + " | " + nombre + " " + apellidos /*+ " | dni: " + dni*/);
             } else if (record instanceof Coche(var mat, var numeroBast, var fechaMat)) {
                 System.out.println("Coche: " + mat + " |  bastidor: " + numeroBast + " | fecha de matriculación: " + fechaMat);
             }

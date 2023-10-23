@@ -47,8 +47,33 @@ import java.util.concurrent.Executors;
 
 public class VirtualThreadsTest {
 
+
+    @Test
+    void unMillonDeThreadNativos() {
+        for (int i = 1; i < 1_000_000; i++) {
+            var number = i;
+            Thread thread = new Thread(() -> {
+                System.out.println("Thread nativo:" + number);
+                try {
+                    Thread.sleep(Duration.ofSeconds(1));
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            thread.start();
+        }
+//        try {
+//            thread.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+    }
+
     @Test
     void unmillondeVirtualThreads() {
+        //try-with-resource try sobre un recurso que implementa Closable
+        //te ahorras el finally { *.close()}
         try (var executor = Executors
                 .newVirtualThreadPerTaskExecutor()) {
             for (int i = 0; i < 1_000_000; i++) {
@@ -56,11 +81,11 @@ public class VirtualThreadsTest {
                 var number = i;
                 executor.submit(() -> {
                     Thread.sleep(Duration.ofSeconds(1));
-                    System.out.println(number);
+                    System.out.println("Virtual thread:" + number);
                     return number;
                 });
             }
-        } // executor.close() is called implicitly, and waits
+        } // executor.close() se llama implícitamente
     }
 
 }
